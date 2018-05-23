@@ -7,12 +7,12 @@ from pkg_resources import parse_version
 import git as git
 from multiprocessing import Pool
 
-from .config import Config
-from .cache import Cache
-from .tools import Tools
-from .makefile_parser.makefile_updater import MakefileUpdater
-from .package_search_update import PackageSearchUpdate
-from .package_builder import PackageBuilder
+from spksrc_updater.config import Config
+from spksrc_updater.cache import Cache
+from spksrc_updater.tools import Tools
+from spksrc_updater.makefile_parser.makefile_updater import MakefileUpdater
+from spksrc_updater.spksrc_updater.package_search_update import PackageSearchUpdate
+from spksrc_updater.spksrc_updater.package_builder import PackageBuilder
 
 _LOGGER = logging.getLogger(__name__)
 

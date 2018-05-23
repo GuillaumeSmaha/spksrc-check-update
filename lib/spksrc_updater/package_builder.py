@@ -6,8 +6,8 @@ from pkg_resources import parse_version
 
 import git as git
 
-from .config import Config
-from .tools import Tools
+from spksrc_updater.config import Config
+from spksrc_updater.tools import Tools
 
 _LOGGER = logging.getLogger(__name__)
 

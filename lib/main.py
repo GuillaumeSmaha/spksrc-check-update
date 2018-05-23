@@ -8,7 +8,7 @@ import multiprocessing
 from datetime import datetime
 import parsedatetime
 from .config import Config
-from .packages_manager import PackagesManager
+from spksrc_updater.spksrc_updater.packages_manager import PackagesManager
 
 _LOGGER = logging.getLogger(__name__)
 

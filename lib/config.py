@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+import six
 import logging
 import multiprocessing
 from datetime import datetime
@@ -117,15 +118,13 @@ class Config:
     def _parse_value(getter, value):
         if isinstance(value, str):
             for match in Config.regex_config_replace.findall(value):
-                replace_value = getter(match[1:-1])
-                if replace_value:
-                    if not isinstance(replace_value, str) and value == match:
+                replace_value = getter(match[1:-1], None)
+                if replace_value is not None:
+                    if value == match:
                         value = replace_value
                         break
                     else:
                         value = value.replace(match, str(replace_value))
-                else:
-                    value = value.replace(match, "")
         return value
 
     @staticmethod
@@ -143,13 +142,16 @@ class Config:
         value = prop.get('default')
         value = Config._parse_value(Config.get_default, value)
 
+        if not value and default:
+            return default
+
         return value
 
     @staticmethod
     def get(property_name, default=None):
         """ Get property value
         """
-        if property_name in Config.configs_cached:
+        if property_name in Config.configs_cached and Config.configs_cached[property_name]:
             return Config.configs_cached[property_name]
 
         prop = configs.get(property_name)
@@ -164,14 +166,17 @@ class Config:
         value = Config.convert(prop, value)
         Config.configs_cached[property_name] = value
 
+        if not value and default:
+            return default
+
         return value
 
     @staticmethod
     def set(property_name, value):
         """ Set new property value
         """
-        if not property_name in configs:
-            return False
+        if property_name not in configs:
+            configs[property_name] = {}
         Config.clear_cache(property_name)
         configs[property_name]['value'] = value
         return True
@@ -184,7 +189,7 @@ class Config:
             del Config.configs_cached[property_name]
 
         prop_var = '%' + property_name + '%'
-        for (key, prop) in configs.items():
+        for (key, prop) in six.iteritems(configs):
             if key in Config.configs_cached:
                 prop_value = prop.get('value')
                 if prop_value is None:
@@ -196,8 +201,11 @@ class Config:
     def convert(prop, value):
         """ Convert value to property type
         """
-        if 'convert' in prop and callable(prop['convert']):
-            value = prop['convert'](value)
+        if value:
+            if 'convert' in prop and callable(prop['convert']):
+                value = prop['convert'](value)
 
-        type_ = prop['type']
-        return type_(value)
+            if 'type' in prop:
+                type_ = prop['type']
+                return type_(value)
+        return value

@@ -16,6 +16,7 @@ setup(
     description="Updater for spksrc",
     long_description="""Updater for spksrc""",
     install_requires=[
+        'six==1.11.0',
         'beautifulsoup4>=4.6.0',
         'GitPython>=2.1.9',
         'html5lib>=0.999999999',

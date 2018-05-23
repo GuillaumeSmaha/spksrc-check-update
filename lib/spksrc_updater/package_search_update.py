@@ -22,10 +22,10 @@ from urllib.parse import urlparse, ParseResult, unquote
 from pkg_resources import parse_version
 from bs4 import BeautifulSoup
 
-from .config import Config
-from .cache import Cache
-# from .tools import Tools
-from .makefile_parser.makefile_parser import MakefileParser
+from spksrc_updater.config import Config
+from spksrc_updater.cache import Cache
+# from spksrc_updater.tools import Tools
+from spksrc_updater.makefile_parser.makefile_parser import MakefileParser
 
 _LOGGER = logging.getLogger(__name__)
 
